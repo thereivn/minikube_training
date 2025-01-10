@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Starting script..."
-echo "This script provides start nginx server using minikube (k8s kubectl)."
+echo "This script provides delete nginx full configuration and stop minikube."
 POD_NAME="nginx-pod"
 SERVICE_NAME="nginx-service"
 
@@ -13,23 +13,22 @@ if [ "$STATUS" == "Stopped" ]; then
 fi
 
 # Проверка наличия пода
-echo -e "\nВыполняется запуск nginx-pod and nginx-service..."
+echo -e "\nВыполняется удаление nginx-pod and nginx-service..."
 POD_EXISTS=$(kubectl get pods --no-headers | awk '{print $1}' | grep "^$POD_NAME$")
 if [ -n "$POD_EXISTS" ]; then
     echo "Под $POD_NAME существует."
+    kubectl delete -f ./yaml-files/nginx-pod.yaml
 else
     echo "Под $POD_NAME не найден."
-    kubectl apply -f ./yaml-files/nginx-pod.yaml
 fi
-
 
 # Проверка наличия сервиса
 SERVICE_EXISTS=$(kubectl get services --no-headers | awk '{print $1}' | grep "^$SERVICE_NAME$")
 if [ -n "$SERVICE_EXISTS" ]; then
     echo "Сервис $SERVICE_NAME существует."
+    kubectl delete -f ./yaml-files/nginx-service.yaml
 else
     echo "Сервис $SERVICE_NAME не найден."
-    kubectl apply -f ./yaml-files/nginx-service.yaml
 fi
 
 # Просмотр списков подов и сервисов
@@ -37,22 +36,8 @@ echo -e "\nEXEC get pods & get service"
 kubectl get pods
 kubectl get services
 
-echo -e "\nПроверка... Дожидаемся, пока pod не будет запущен..." 
-# Проверяем статус пода
-while true; do
-    STATUS=$(kubectl get pod "$POD_NAME" --no-headers | awk '{print $3}')
-
-    if [ "$STATUS" = "Running" ]; then
-        echo "Под $POD_NAME запущен и имеет статус Running."
-        break
-    else
-        echo "Под $POD_NAME в статусе $STATUS. Повторная проверка через 2 секунды..."
-        sleep 2
-    fi
-done
-
-echo -e "\nСейчас откроется окно браузера!"
-#kubectl exec -it "$POD_NAME" -- curl localhost:80
-minikube service "$SERVICE_NAME"
+# Остановка minikube
+echo -e "\nОстановка minikube..."
+minikube stop
 
 echo -e "\nНа этом выполнение скрипта $0 завершается!"
