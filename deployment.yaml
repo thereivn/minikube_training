@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: reivn-fastapi-app
-        image: thereivn/reivn-fastapi:0.0.1
+        image: thereivn/reivn-fastapi-v:0.0.1
         resources:
           limits:
             memory: "128Mi"
