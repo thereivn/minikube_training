@@ -8,3 +8,7 @@
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) установлен.
 - Файлы конфигурации для пода и сервиса Nginx (`nginx-pod.yaml` и `nginx-service.yaml`).
 - (По желанию) Наличие скриптов для быстрого взаимодействия с minikube.
+
+## Взаимодействие с app reivn-fastapi
+
+Программа fast-api позволяющая потренироваться делать запуск под minikube маленького приложения. Имеет скрипт, манифест файл yaml, dockerfile и само приложение.
